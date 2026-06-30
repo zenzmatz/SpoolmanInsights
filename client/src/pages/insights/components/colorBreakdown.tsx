@@ -1,4 +1,5 @@
 import { Card, Col, Row, Space, Typography } from "antd";
+import { useTranslate } from "@refinedev/core";
 import SpoolIcon from "../../../components/spoolIcon";
 import { IColorSummary } from "../model";
 
@@ -7,9 +8,23 @@ interface ColorBreakdownProps {
   loading: boolean;
 }
 
+function getDisplayName(item: IColorSummary, unknownLabel: string, multiColorLabel: string): string {
+  if (item.color_key === "UNKNOWN") {
+    return unknownLabel;
+  }
+
+  if (item.color_key.startsWith("MULTI:")) {
+    return multiColorLabel;
+  }
+
+  return item.display_name;
+}
+
 export function ColorBreakdown({ items, loading }: Readonly<ColorBreakdownProps>) {
+  const t = useTranslate();
+
   return (
-    <Card title="By color" loading={loading}>
+    <Card title={t("insights.sections.by_color")} loading={loading}>
       <Row gutter={[12, 12]}>
         {items.map((item) => (
           <Col xs={24} md={12} xl={8} key={item.color_key}>
@@ -17,11 +32,13 @@ export function ColorBreakdown({ items, loading }: Readonly<ColorBreakdownProps>
               <Space align="start">
                 {item.display_hex ? <SpoolIcon color={item.display_hex} /> : <div style={{ width: 24 }} />}
                 <div>
-                  <Typography.Text strong>{item.display_name}</Typography.Text>
+                  <Typography.Text strong>{getDisplayName(item, t("unknown"), t("insights.values.multi_color"))}</Typography.Text>
                   <br />
-                  <Typography.Text type="secondary">{item.spool_count} spools</Typography.Text>
+                  <Typography.Text type="secondary">{t("insights.values.spools_count", { count: item.spool_count })}</Typography.Text>
                   <br />
-                  <Typography.Text type="secondary">{item.remaining_weight_total_g.toFixed(0)} g remaining</Typography.Text>
+                  <Typography.Text type="secondary">
+                    {t("insights.values.remaining_grams", { count: item.remaining_weight_total_g.toFixed(0) })}
+                  </Typography.Text>
                 </div>
               </Space>
             </Card>

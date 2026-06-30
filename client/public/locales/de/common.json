@@ -336,6 +336,9 @@
         },
         "locations": {
             "list": "Orte | Spoolman"
+        },
+        "insights": {
+            "list": "Einblicke | Spoolman"
         }
     },
     "help": {
@@ -367,6 +370,14 @@
             "round_prices": {
                 "label": "Gerundeter Preis",
                 "tooltip": "Rundet die Preise auf die nächsthöhere ganze Zahl."
+            }
+        },
+        "insights": {
+            "tab": "Einblicke",
+            "description": "Konfiguriere das Standardverhalten der Einblicke-Ansicht.",
+            "low_stock_threshold_g": {
+                "label": "Schwellwert für niedrigen Bestand (g)",
+                "tooltip": "Spulen mit diesem verbleibenden Gewicht oder weniger werden in den Einblicken als niedriger Bestand angezeigt."
             }
         },
         "extra_fields": {
@@ -401,6 +412,44 @@
             "non_unique_key_error": "Der Schlüssel muss einzigartig sein."
         },
         "settings": "Einstellungen"
+    },
+    "insights": {
+        "title": "Einblicke",
+        "description": "Bestandsübersicht, Überwachung niedriger Bestände und Zusammenfassungen nach Ort und Material. Der Schwellwert für niedrigen Bestand wird in den Einstellungen verwaltet.",
+        "empty": "Keine Spulen entsprechen den aktuellen Filtern.",
+        "filters": {
+            "recent_days": "Zeitraum zuletzt genutzt (Tage)",
+            "include_archived": "Archivierte einschließen"
+        },
+        "overview": {
+            "active_spools": "Aktive Spulen",
+            "low_stock": "Niedriger Bestand",
+            "locations": "Orte",
+            "remaining_inventory": "Verbleibender Bestand"
+        },
+        "low_stock": {
+            "title": "Spulen mit niedrigem Bestand (Schwellwert {{threshold}} g)"
+        },
+        "sections": {
+            "by_material": "Nach Material",
+            "by_location": "Nach Ort",
+            "by_color": "Nach Farbe",
+            "recent_activity": "Kürzliche Aktivität ({{days}} Tage)"
+        },
+        "columns": {
+            "materials": "Materialien"
+        },
+        "actions": {
+            "view_spools": "Spulen anzeigen"
+        },
+        "values": {
+            "unknown_vendor": "Unbekannter Hersteller",
+            "unassigned": "Nicht zugewiesen",
+            "unused": "Unbenutzt",
+            "multi_color": "Mehrfarbig",
+            "spools_count": "{{count}} Spulen",
+            "remaining_grams": "{{count}} g verbleibend"
+        }
     },
     "locations": {
         "no_location": "Kein Ort",

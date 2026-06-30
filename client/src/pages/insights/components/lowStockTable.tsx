@@ -1,4 +1,5 @@
 import { Button, Card, Space, Table, Tag } from "antd";
+import { useTranslate } from "@refinedev/core";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { ILowStockSpool } from "../model";
@@ -13,9 +14,17 @@ interface LowStockTableProps {
   onEditSpool: (spoolId: number) => void;
 }
 
-export function LowStockTable({ items, loading, thresholdG, onOpenSpool, onEditSpool }: LowStockTableProps) {
+function formatSpoolLabel(record: ILowStockSpool, unknownVendor: string): string {
+  const vendorName = record.vendor_name ?? unknownVendor;
+  const filamentName = record.filament_name ?? "#" + String(record.filament_id);
+  return `${vendorName} - ${filamentName}`;
+}
+
+export function LowStockTable({ items, loading, thresholdG, onOpenSpool, onEditSpool }: Readonly<LowStockTableProps>) {
+  const t = useTranslate();
+
   return (
-    <Card title={`Low stock spools (${thresholdG} g threshold)`}>
+    <Card title={t("insights.low_stock.title", { threshold: thresholdG.toFixed(0) })}>
       <Table<ILowStockSpool>
         loading={loading}
         dataSource={items}
@@ -24,45 +33,56 @@ export function LowStockTable({ items, loading, thresholdG, onOpenSpool, onEditS
         scroll={{ x: "max-content" }}
         columns={[
           {
-            title: "Spool",
+            title: t("spool.spool"),
             key: "spool",
-            render: (_, record) => `${record.vendor_name ?? "Unknown vendor"} - ${record.filament_name ?? `#${record.filament_id}`}`,
+            render: (_, record) => formatSpoolLabel(record, t("insights.values.unknown_vendor")),
           },
           {
-            title: "Material",
+            title: t("spool.fields.material"),
             dataIndex: "material",
             key: "material",
-            render: (value: string | undefined) => value ?? "Unknown",
+            render: (value: string | undefined) => value ?? t("unknown"),
           },
           {
-            title: "Location",
+            title: t("spool.fields.location"),
             dataIndex: "location",
             key: "location",
-            render: (value: string | undefined) => value ?? "Unassigned",
+            render: (value: string | undefined) => {
+              if (value === "Unassigned" || value === undefined) {
+                return t("insights.values.unassigned");
+              }
+              return value;
+            },
           },
           {
-            title: "Remaining",
+            title: t("spool.fields.remaining_weight"),
             dataIndex: "remaining_weight_g",
             key: "remaining_weight_g",
             align: "right",
-            render: (value: number | undefined) => (value !== undefined ? `${value.toFixed(0)} g` : "Unknown"),
+            render: (value: number | undefined) => {
+              if (value === undefined) {
+                return t("unknown");
+              }
+
+              return `${value.toFixed(0)} g`;
+            },
           },
           {
-            title: "Last used",
+            title: t("spool.fields.last_used"),
             dataIndex: "last_used",
             key: "last_used",
-            render: (value: string | undefined) => (value ? dayjs(value).fromNow() : <Tag>Unused</Tag>),
+            render: (value: string | undefined) => (value ? dayjs(value).fromNow() : <Tag>{t("insights.values.unused")}</Tag>),
           },
           {
-            title: "Action",
+            title: t("table.actions"),
             key: "action",
             render: (_, record) => (
               <Space>
                 <Button size="small" onClick={() => onOpenSpool(record.spool_id)}>
-                  View
+                  {t("buttons.show")}
                 </Button>
                 <Button size="small" onClick={() => onEditSpool(record.spool_id)}>
-                  Edit
+                  {t("buttons.edit")}
                 </Button>
               </Space>
             ),

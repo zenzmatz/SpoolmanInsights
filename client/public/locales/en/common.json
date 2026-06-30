@@ -364,6 +364,44 @@
             "delete_confirm_description": "This will delete the field and all associated data for all entities."
         }
     },
+    "insights": {
+        "title": "Insights",
+        "description": "Inventory overview, low stock monitoring, and location/material summaries. The low stock threshold is managed in Settings.",
+        "empty": "No spools match the current filters.",
+        "filters": {
+            "recent_days": "Recent window (days)",
+            "include_archived": "Include archived"
+        },
+        "overview": {
+            "active_spools": "Active spools",
+            "low_stock": "Low stock",
+            "locations": "Locations",
+            "remaining_inventory": "Remaining inventory"
+        },
+        "low_stock": {
+            "title": "Low stock spools ({{threshold}} g threshold)"
+        },
+        "sections": {
+            "by_material": "By material",
+            "by_location": "By location",
+            "by_color": "By color",
+            "recent_activity": "Recent activity ({{days}} days)"
+        },
+        "columns": {
+            "materials": "Materials"
+        },
+        "actions": {
+            "view_spools": "Show Spools"
+        },
+        "values": {
+            "unknown_vendor": "Unknown vendor",
+            "unassigned": "Unassigned",
+            "unused": "Unused",
+            "multi_color": "Multi-color",
+            "spools_count": "{{count}} spools",
+            "remaining_grams": "{{count}} g remaining"
+        }
+    },
     "documentTitle": {
         "default": "Spoolman",
         "suffix": " | Spoolman",
@@ -375,6 +413,9 @@
         },
         "locations": {
             "list": "Locations | Spoolman"
+        },
+        "insights": {
+            "list": "Insights | Spoolman"
         },
         "filament": {
             "list": "Filaments | Spoolman",

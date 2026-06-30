@@ -1,4 +1,5 @@
 import { Button, Card, Space, Table, Tag } from "antd";
+import { useTranslate } from "@refinedev/core";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { IRecentActivityItem } from "../model";
@@ -13,8 +14,10 @@ interface RecentActivityProps {
 }
 
 export function RecentActivity({ items, loading, days, onOpenSpool }: Readonly<RecentActivityProps>) {
+  const t = useTranslate();
+
   return (
-    <Card title={`Recent activity (${days} days)`}>
+    <Card title={t("insights.sections.recent_activity", { days })}>
       <Table<IRecentActivityItem>
         loading={loading}
         dataSource={items}
@@ -24,36 +27,41 @@ export function RecentActivity({ items, loading, days, onOpenSpool }: Readonly<R
         scroll={{ x: "max-content" }}
         columns={[
           {
-            title: "Spool",
+            title: t("spool.spool"),
             key: "spool",
             render: (_, record) => {
-              const vendorName = record.vendor_name ?? "Unknown vendor";
+              const vendorName = record.vendor_name ?? t("insights.values.unknown_vendor");
               const filamentName = record.filament_name ?? "#" + String(record.spool_id);
               return `${vendorName} - ${filamentName}`;
             },
           },
-          { title: "Material", dataIndex: "material", key: "material" },
-          { title: "Location", dataIndex: "location", key: "location" },
+          { title: t("spool.fields.material"), dataIndex: "material", key: "material" },
           {
-            title: "Last used",
+            title: t("spool.fields.location"),
+            dataIndex: "location",
+            key: "location",
+            render: (value: string | undefined) => (value === "Unassigned" ? t("insights.values.unassigned") : value),
+          },
+          {
+            title: t("spool.fields.last_used"),
             dataIndex: "last_used",
             key: "last_used",
             render: (value: string) => dayjs(value).fromNow(),
           },
           {
-            title: "Remaining",
+            title: t("spool.fields.remaining_weight"),
             dataIndex: "remaining_weight_g",
             key: "remaining_weight_g",
             align: "right",
-            render: (value: number | undefined) => (value === undefined ? <Tag>Unknown</Tag> : `${value.toFixed(0)} g`),
+            render: (value: number | undefined) => (value === undefined ? <Tag>{t("unknown")}</Tag> : `${value.toFixed(0)} g`),
           },
           {
-            title: "Action",
+            title: t("table.actions"),
             key: "action",
             render: (_, record) => (
               <Space>
                 <Button size="small" onClick={() => onOpenSpool(record.spool_id)}>
-                  View
+                  {t("buttons.show")}
                 </Button>
               </Space>
             ),

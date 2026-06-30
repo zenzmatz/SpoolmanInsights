@@ -1,4 +1,5 @@
 import { Col, Empty, InputNumber, Row, Select, Space, Switch, Typography } from "antd";
+import { useTranslate } from "@refinedev/core";
 import { useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import { useSpoolmanLocations, useSpoolmanMaterials } from "../../components/otherModels";
@@ -44,8 +45,13 @@ function parseThresholdSetting(value: string | undefined): number {
   }
 }
 
+function getLocationLabel(location: string, unassignedLabel: string): string {
+  return location === "Unassigned" ? unassignedLabel : location;
+}
+
 export const Insights = () => {
   const navigate = useNavigate();
+  const t = useTranslate();
   const [searchParams, setSearchParams] = useSearchParams();
   const thresholdSetting = useGetSetting("insights_low_stock_threshold_g");
   const filters = useMemo(() => {
@@ -106,21 +112,21 @@ export const Insights = () => {
     <Space direction="vertical" size="large" style={{ display: "flex" }}>
       <div>
         <Typography.Title level={2} style={{ marginBottom: 0 }}>
-          Insights
+          {t("insights.title")}
         </Typography.Title>
         <Typography.Paragraph type="secondary" style={{ marginBottom: 0 }}>
-          Inventory overview, low stock monitoring, and location/material summaries. The low stock threshold is managed in Settings.
+          {t("insights.description")}
         </Typography.Paragraph>
       </div>
 
       <Space wrap>
         <div>
-          <Typography.Text strong>Recent window (days)</Typography.Text>
+          <Typography.Text strong>{t("insights.filters.recent_days")}</Typography.Text>
           <br />
           <InputNumber min={1} max={365} value={filters.days} onChange={(value) => updateParam("days", value ?? 30)} />
         </div>
         <div>
-          <Typography.Text strong>Material</Typography.Text>
+          <Typography.Text strong>{t("spool.fields.material")}</Typography.Text>
           <br />
           <Select
             allowClear
@@ -131,18 +137,21 @@ export const Insights = () => {
           />
         </div>
         <div>
-          <Typography.Text strong>Location</Typography.Text>
+          <Typography.Text strong>{t("spool.fields.location")}</Typography.Text>
           <br />
           <Select
             allowClear
             style={{ minWidth: 180 }}
             value={filters.location}
-            options={(locationOptions.data ?? []).map((location) => ({ label: location, value: location }))}
+            options={(locationOptions.data ?? []).map((location) => ({
+              label: getLocationLabel(location, t("insights.values.unassigned")),
+              value: location,
+            }))}
             onChange={(value) => updateParam("location", value)}
           />
         </div>
         <div>
-          <Typography.Text strong>Include archived</Typography.Text>
+          <Typography.Text strong>{t("insights.filters.include_archived")}</Typography.Text>
           <br />
           <Switch checked={filters.allow_archived} onChange={(checked) => updateParam("allow_archived", checked || undefined)} />
         </div>
@@ -176,7 +185,7 @@ export const Insights = () => {
         onOpenSpool={(spoolId) => navigate(`/spool/show/${spoolId}`)}
       />
 
-      {!overview.isLoading && (overview.data?.spool_count ?? 0) === 0 && <Empty description="No spools match the current filters." />}
+      {!overview.isLoading && (overview.data?.spool_count ?? 0) === 0 && <Empty description={t("insights.empty")} />}
     </Space>
   );
 };
